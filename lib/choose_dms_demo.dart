@@ -17,9 +17,6 @@ class ChooseDmsDemo extends StatelessWidget {
                   builder: (context) => const RunModelByCameraDemo()),
             )
           },
-          style: TextButton.styleFrom(
-            backgroundColor: Colors.blue,
-          ),
           child: const Text(
             "Run Model with Camera",
             style: TextStyle(
@@ -35,9 +32,6 @@ class ChooseDmsDemo extends StatelessWidget {
                   builder: (context) => const RunModelByImageDemo()),
             )
           },
-          style: TextButton.styleFrom(
-            backgroundColor: Colors.blue,
-          ),
           child: const Text(
             "Run Model with Image",
             style: TextStyle(

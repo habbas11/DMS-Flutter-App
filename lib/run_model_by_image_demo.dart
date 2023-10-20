@@ -111,10 +111,11 @@ class _RunModelByImageDemoState extends State<RunModelByImageDemo> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
+    return WillPopScope(
+      onWillPop: () async => true,
+      child: Scaffold(
         appBar: AppBar(
-          title: const Text('DMS model on an Image'),
+          title: const Text('DMS Image Demo'),
         ),
         body: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -122,14 +123,14 @@ class _RunModelByImageDemoState extends State<RunModelByImageDemo> {
             Expanded(
               child: detectedObjects.isNotEmpty
                   ? _image == null
-                      ? const Text('No image selected.')
-                      : _objectModelYoloV8.renderBoxesOnImage(
-                          _image!,
-                          detectedObjects,
-                        )
+                  ? const Text('No image selected.')
+                  : _objectModelYoloV8.renderBoxesOnImage(
+                _image!,
+                detectedObjects,
+              )
                   : _image == null
-                      ? const Text('No image selected.')
-                      : Image.file(_image!),
+                  ? const Text('No image selected.')
+                  : Image.file(_image!),
             ),
             Center(
               child: Visibility(
@@ -142,9 +143,6 @@ class _RunModelByImageDemoState extends State<RunModelByImageDemo> {
             ),
             TextButton(
               onPressed: runObjectDetectionYoloV8,
-              style: TextButton.styleFrom(
-                backgroundColor: Colors.blue,
-              ),
               child: const Text(
                 "Choose Image From Gallery",
                 style: TextStyle(

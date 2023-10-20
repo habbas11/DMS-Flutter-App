@@ -26,6 +26,7 @@ class CameraView extends StatefulWidget {
 }
 
 class _CameraViewState extends State<CameraView> with WidgetsBindingObserver {
+  List<bool> objects = [false, false, false, false, false];
   int frameCount = 0;
   double fps = 0.0;
   DateTime? lastTime;
@@ -174,6 +175,10 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
+    Size screenSize = MediaQuery.of(context).size;
+    double screenHeight = screenSize.height;
+    print('HERE: $objects');
+
     // Return empty container while the camera is not initialized
     if (cameraController == null || !cameraController!.value.isInitialized) {
       return Container();
@@ -207,6 +212,132 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver {
             child: const Icon(Icons.cameraswitch),
           ),
         ),
+        Positioned(
+          top: screenHeight / 4,
+          left: 10,
+          child: Container(
+            padding: const EdgeInsets.all(5),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(20.0),
+              color: Colors.black.withAlpha(60),
+            ),
+            child: Column(
+              children: [
+                // Awake
+                Column(
+                  children: [
+                    Container(
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        border: Border.all(
+                          color: objects[1] ? Colors.red : Colors.transparent,
+                          width: 5,
+                        ),
+                      ),
+                      width: 60,
+                      height: 60,
+                      child: const Icon(
+                        Icons.bedtime,
+                        color: Colors.white,
+                      ),
+                    ),
+                    const Text(
+                      'Sleepy',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ],
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+
+                // Cigarette
+                Column(
+                  children: [
+                    Container(
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        border: Border.all(
+                          color: objects[2] ? Colors.red : Colors.transparent,
+                          width: 5,
+                        ),
+                      ),
+                      width: 60,
+                      height: 60,
+                      child: const Icon(
+                        Icons.smoking_rooms_sharp,
+                        color: Colors.white,
+                      ),
+                    ),
+                    const Text(
+                      'Cigarette',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ],
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+
+                // Phone
+                Column(
+                  children: [
+                    Container(
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        border: Border.all(
+                          color: objects[3] ? Colors.red : Colors.transparent,
+                          width: 5,
+                        ),
+                      ),
+                      width: 60,
+                      height: 60,
+                      child: const Icon(
+                        Icons.phone_android,
+                        color: Colors.white,
+                      ),
+                    ),
+                    const Text(
+                      'Phone',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ],
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+
+                // Seatbelt
+                Column(
+                  children: [
+                    Container(
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        border: Border.all(
+                          color: !objects[4] ? Colors.red : Colors.transparent,
+                          width: 5,
+                        ),
+                      ),
+                      width: 60,
+                      height: 60,
+                      child: const Icon(
+                        Icons.safety_check,
+                        color: Colors.white,
+                      ),
+                    ),
+                    const Text(
+                      'Seatbelt',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ],
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+              ],
+            ),
+          ),
+        )
       ],
     );
   }
@@ -251,46 +382,37 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver {
         iOUThreshold: 0.3,
       );
 
-      // print('START');
-      // for (var obj in objDetect) {
-      //   print(obj.className);
-      // }
-      // print('DONE');
-
       List<ResultObjectDetection> objDetectTemp = objDetect;
-
+      objects[1] = false;
+      objects[2] = false;
+      objects[3] = false;
+      objects[4] = false;
       for (var detectedObject in objDetectTemp) {
+
         if (detectedObject.className == 'Closed Eye' &&
             labelFreq('Closed Eye', objDetectTemp) == 2 &&
             detectedClosed == false) {
           classFreq?[detectedObject.className] =
               classFreq![detectedObject.className]! + 1;
           detectedClosed = true;
-
           print('Detected 2 closed eyes!');
           eyesStopwatch = Stopwatch()..start();
         } else if (detectedObject.className == 'Open Eye') {
           detectedClosed = false;
         }
 
-        // if (classFreq!.containsKey(detectedObject.className)) {
-        //   if (detectedObject.className == 'Closed Eye' &&
-        //       labelFreq('Closed Eye', objDetectTemp) == 2 &&
-        //       !detectedClosed) {
-        //     classFreq?[detectedObject.className] =
-        //         classFreq![detectedObject.className]! + 1;
-        //     detectedClosed = true;
-        //     print('Detected 2 closed eyes!');
-        //     eyesStopwatch = Stopwatch()..start();
-        //   } else if (detectedObject.className == 'Open Eye' &&
-        //       labelFreq('Open Eye', objDetectTemp) == 2) {
-        //     eyesStopwatch = Stopwatch()..stop();
-        //     detectedClosed = false;
-        //   } else if (detectedObject.className != 'Closed Eye') {
-        //     classFreq?[detectedObject.className] =
-        //         classFreq![detectedObject.className]! + 1;
-        //   }
-        // }
+        if (detectedObject.className == 'Cigarette') {
+            objects[2] = true;
+        }
+
+        if (detectedObject.className == 'Phone') {
+            objects[3] = true;
+        }
+
+        if (detectedObject.className == 'Seatbelt') {
+            objects[4] = true;
+        }
+
         print(
             '${detectedObject.className} = ${classFreq?[detectedObject.className]}');
       }
@@ -303,6 +425,7 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver {
           eyesStopwatch.reset();
           await player.stop();
         } else {
+          objects[1] = true;
           await player.play(AssetSource('sound_effects/beep.mp3'));
         }
       }

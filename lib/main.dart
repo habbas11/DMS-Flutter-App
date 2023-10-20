@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:dio/dio.dart';
+import 'package:dms_demo/run_model_by_camera_demo.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
@@ -54,6 +55,8 @@ class _ModelConfigState extends State<ModelConfig> {
 
   Future<DmsModelInfo> _initModelState() async {
     try {
+      print('Entered _initModelState');
+
       const repoUrl =
           "https://raw.githubusercontent.com/habbas11/test_json/main/DMS_Version.json";
 
@@ -62,14 +65,16 @@ class _ModelConfigState extends State<ModelConfig> {
         repoUrl,
         options: Options(
           headers: {
-            'Authorization': 'token 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',
+            // 'Authorization': 'token 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',
             'Accept': 'application/vnd.github.v4+raw',
             'Accept-Encoding': 'identity',
           },
         ),
       );
+      print('HERE ${response.statusCode}');
       if (response.statusCode == 200) {
         final jsonData = json.decode(response.data);
+        print(jsonData);
         dmsModelInfo = DmsModelInfo.fromJson(jsonData);
         return dmsModelInfo;
       } else {
@@ -140,7 +145,7 @@ class _ModelConfigState extends State<ModelConfig> {
       '${downloadsDirectory?.path}/$labelsFileName',
       options: Options(
         headers: {
-          'Authorization': 'token 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',
+          // 'Authorization': 'token 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',
           'Accept': 'application/vnd.github.v4+raw',
           'Accept-Encoding': 'identity',
         },
@@ -154,13 +159,14 @@ class _ModelConfigState extends State<ModelConfig> {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData(
-        primaryColor: Colors.red,
-        secondaryHeaderColor: Colors.black,
+        appBarTheme: AppBarTheme(
+          color: Colors.black87,
+        ),
         textButtonTheme: TextButtonThemeData(
           style: TextButton.styleFrom(
-            backgroundColor: Colors.blueAccent,
-          ),
-        ),
+            backgroundColor: Colors.black87,
+          )
+        )
       ),
       home: Scaffold(
         appBar: AppBar(
