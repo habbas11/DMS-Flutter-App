@@ -4,7 +4,7 @@ Last updated: 20/10/2023
 
 Effective date: 20/10/2023
 
-This Privacy Policy explains how [Your Company Name] ("we," "our," or "us") collects, uses, and protects your personal information when you use the DMS (Driver Monitoring System) mobile application (the "App").
+This Privacy Policy explains how DMS ("we," "our," or "us") collects, uses, and protects your personal information when you use the DMS (Driver Monitoring System) mobile application (the "App").
 
 **Information We Collect**
 
