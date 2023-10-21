@@ -18,7 +18,7 @@ class ChooseDmsDemo extends StatelessWidget {
             )
           },
           child: const Text(
-            "Run Model with Camera",
+            "Start a Trip",
             style: TextStyle(
               color: Colors.white,
             ),
